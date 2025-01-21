@@ -214,3 +214,6 @@ STEP21: Create Autoscaling Group
 22. Create SNS and CloudWatch
 ![image](https://github.com/user-attachments/assets/bddd3c7f-67de-42c0-a48e-83dc6f79ce4c)
 ![image](https://github.com/user-attachments/assets/f7db7c4f-420c-487b-a602-9eec424cf362)
+![Uploading photo_2025-01-21_19-57-37.jpg…]()
+
+
