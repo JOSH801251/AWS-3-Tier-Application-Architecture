@@ -1,0 +1,145 @@
+1. Create Demo-VPC  - 10.0.0.0/16
+Crete two Public Subnets
+Public-Subnet-1 - 10.0.1.0/24
+Public-Subnet-2 - 10.0.2.0/24
+Create two Private subnets
+Private-Subnet-1 - 10.0.3.0/24
+Private-Subnet-2 - 10.0.4.0/24
+Create two routable & add two Public Subnets in (( Public RT)) add two Private Subnets in (( Private RT))
+Public-RT - Add Public-Subnet-1&2
+Private-RT - Add Private-Subnet-1&2
+Create to gateway & Attach two VPC
+Internet-Gateway - Attach to VPC
+Create NAT Gateway -public subnet
+
+In the Public RT - Add a rule - 0.0.0.0/0  - IGW
+In the Private RT - Add a rule - 0.0.0.0/0  - NAT
+
+
+creation of Instances
+Bastion-host
+aws-key(your key)
+demo-vpc
+public-subnet 1 or 2
+security-group: VPC-SG
+description: Bastion-host S-G
+
+
+Security-group
+type: SSH           TCP 22     
+anywhere
+auto assign : enable
+
+Launch instances
+
+
+Create 2 Instances 
+Name: App-server 1
+key: aws-key
+vpc: demo-vpc
+subnet: private subnet 1
+
+Security Group
+Name: App-SG
+Description: App-SG
+
+Security group 1
+
+SSH           TCP      22
+Custom        Bastion-host  
+
+
+Security group 2
+
+HTTP TCP  80
+Anywhere    -  ---
+
+Launch Instances
+
+Name: App-server 2
+key: aws-key
+vpc: demo-vpc
+subnet: private subnet 2
+security group Existing-group  App-SG
+
+Launch instances
+
+Mobaxstream
+
+create a new session of ssh for Bastion-host
+
+create duplicate instances    one is for Appserver 1 & Appserver 2
+
+set into multiple vies
+
+cammands:  Hostname Bastion-Host(jump-server)
+before change ec2-user into rootuser # sudo su
+#sudo su -
+go to you Key location and open the key file via notepad copy the key fully
+now in mobxstream tab 
+#vi key
+insert mode
+paste the code    shift : wq!save it
+change permission
+#ll
+#chmod 400 key
+#ll
+#clear
+
+
+login to shh
+copy the app server 1 private ip address 
+#ssh   -i  key  ec2-user@paste here private ip address
+#sudo su
+#hostname Appserver-1
+#sudo su -
+
+Go  to second  of duplicate tab of (bastion host)
+do this again
+
+login to shh
+copy the app server 2 private ip address 
+#ssh   -i  key  ec2-user@paste here private ip address
+#sudo su
+#hostname Appserver-2
+#sudo su -
+
+change into multi execution mode
+#yum install httpd -y
+#cd var/www/html
+#wget paste css link                                (freecss.com)   (download link copy from this link)
+#unzip zipfile
+#rm zipfile to delete it
+#ls
+#mv zipfilename/* .
+#ls
+#systemctl start httpd
+Create A Load balancer 
+-> go to load balancer tab
+--> create a application load balancer
+     name: App-lb
+     vpc:  Demo-vpc
+     Availalabilty zone :  select all Availability Zones public Subnets 1   & 2
+---> Create a Security Group:
+     name: Alb-SG
+     Description: Alb-SG
+     VPC: demo-vpc
+     inbound:HTTP   -80    Anywhere - IPv4
+     outbound:All traffic
+---> create SG
+Select Your Security-----> ALB-SG
+
+
+Crete Target group :
+name: App-TGT
+vpc: Demo VPC
+             Click ----> next
+--->Select Your instance For App.Load Balancer
+------> Appserver 1 & 2  it 
+click-------> Create Target Group
+
+
+---> Select Target group for Load Balancer
+---> create  Load Balancer.  wait for few sec it will initializing....
+---->  copy the DNS name:
+-----> paste  it on net tab.   it will works
