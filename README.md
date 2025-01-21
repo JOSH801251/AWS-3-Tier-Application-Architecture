@@ -10,6 +10,9 @@
  Amazon S3, Amazon VPC, Amazon NAT, IAM Role
 
 Block Diagram:
+
+
+
 ![image](https://github.com/user-attachments/assets/26d6fa14-3718-40ac-98ea-382d34890494)
 Procedure:
 1.	Create VPC – 10.0.0.0/16
